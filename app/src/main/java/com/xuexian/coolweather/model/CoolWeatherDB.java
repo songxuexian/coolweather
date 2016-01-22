@@ -27,7 +27,7 @@ public class CoolWeatherDB {
         db = dbHelper.getWritableDatabase();
     }
 
-    public synchronized static CoolWeatherDB getInstenct(Context context) {
+    public synchronized static CoolWeatherDB getInstance(Context context) {
         if (coolWeatherDB == null) {
             coolWeatherDB = new CoolWeatherDB(context);
         }
@@ -70,7 +70,7 @@ public class CoolWeatherDB {
 
     public List<City> loadCities(int provinceId) {
         List<City> list = new ArrayList<>();
-        Cursor cursor = db.query("City", null, "province_is = ?",
+        Cursor cursor = db.query("City", null, "province_id = ?",
                 new String[]{String.valueOf(provinceId)}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
@@ -97,14 +97,14 @@ public class CoolWeatherDB {
 
     public List<County> loadCounties(int cityId) {
         List<County> list = new ArrayList<>();
-        Cursor cursor = db.query("Province", null, "city = ?",
+        Cursor cursor = db.query("County", null, "city_id = ?",
                 new String[]{String.valueOf(cityId)}, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 County county = new County();
                 county.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                county.setCountyName(cursor.getString(cursor.getColumnIndex("province_name")));
-                county.setCountyCode(cursor.getString(cursor.getColumnIndex("province_code")));
+                county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
+                county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
                 county.setCityId(cityId);
                 list.add(county);
             } while (cursor.moveToNext());
